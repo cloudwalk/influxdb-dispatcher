@@ -1,0 +1,27 @@
+[package]
+name = "influxdb-dispatcher"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+influxdb = "0.5"
+
+# Config
+envconfig = "0.9"
+
+# Logging
+tracing = "0.1"
+
+# Async
+tokio = { version = "1.14", features = ["macros"] }
+futures = { version = "0.3", default-features = false, features = ["std"] }
+async-trait = "0.1"
+
+# Serializing
+serde = "1.0"
+toml = "0.5"
+
+[features]
+util = []
