@@ -1,4 +1,4 @@
-# Flex Version
+# InfluxDb Dispatcher
 
 [![Crates.io](https://img.shields.io/crates/v/influxdb-dispatcher?style=flat-square)](https://crates.io/crates/influxdb-dispatcher)
 [![Crates.io](https://img.shields.io/crates/d/influxdb-dispatcher?style=flat-square)](https://crates.io/crates/influxdb-dispatcher)
