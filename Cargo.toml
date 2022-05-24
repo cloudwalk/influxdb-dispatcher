@@ -2,6 +2,11 @@
 name = "influxdb-dispatcher"
 version = "0.1.0"
 edition = "2021"
+description = "Batch metrics collection using influxdb"
+authors = [ "cloudwalk.io" ]
+license = "MIT"
+repository = "https://github.com/cloudwalk/influxdb-dispatcher"
+keywords = [ "influxdb", "grafana" ]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
