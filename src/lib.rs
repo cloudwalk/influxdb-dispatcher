@@ -1,4 +1,4 @@
-//! Batch metrics collection using [influxdb].
+#![doc = include_str!("../README.md")]
 
 #[cfg(feature = "util")]
 pub mod util;
