@@ -6,30 +6,39 @@ pub mod util;
 use std::time::Duration;
 
 use async_trait::async_trait;
-use tokio::sync::mpsc;
 use futures::{stream::FuturesUnordered, StreamExt};
 use influxdb::InfluxDbWriteable;
+use tokio::sync::mpsc;
+
+/// Convert a metric to an [influxdb] query using the type name.
+pub trait IntoNamedQuery: InfluxDbWriteable + Sized {
+    fn into_named_query(self) -> influxdb::WriteQuery {
+        let type_name = std::any::type_name::<Self>();
+
+        let name = type_name
+            .rsplit_once("::")
+            .map(|(_, name)| name)
+            .unwrap_or(type_name);
+
+        InfluxDbWriteable::into_query(self, name)
+    }
+}
+
+impl<T: InfluxDbWriteable> IntoNamedQuery for T { }
 
 /// Dispatch a single metric to the database.
-pub async fn dispatch<M: InfluxDbWriteable>(client: &influxdb::Client, metric: M) {
-    let type_name = std::any::type_name::<M>();
-
-    let name = type_name
-        .rsplit_once("::")
-        .map(|(_, name)| name)
-        .unwrap_or(type_name);
-
-    if let Err(error) = client.query(metric.into_query(name)).await {
+/// Will emmit a log record if an error occurs.
+pub async fn dispatch(client: &influxdb::Client, metric: influxdb::WriteQuery) {
+    if let Err(error) = client.query(metric).await {
         tracing::error!("Failed to submit metric: {}", error);
     }
 }
 
 /// Dispatch many metrics to the database.
 /// These will be dispatched concurrently.
-pub async fn dispatch_many<M, I>(client: &influxdb::Client, metrics: I)
+pub async fn dispatch_many<I>(client: &influxdb::Client, metrics: I)
 where
-    M: InfluxDbWriteable,
-    I: IntoIterator<Item = M>,
+    I: IntoIterator<Item = influxdb::WriteQuery>,
 {
     metrics
         .into_iter()
