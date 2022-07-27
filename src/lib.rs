@@ -88,11 +88,11 @@ where
 {
     /// Start the metrics task.
     /// This task will run indefinitely, but will be aborted when the handle is dropped.
-    pub fn new<C>(consumer: C, push_interval: u64) -> Self
+    pub fn new<C>(consumer: C, push_interval: u64, buffer_size: usize) -> Self
     where
         C: MetricsConsumer<Metric = M> + Send + 'static,
     {
-        let (tx, rx) = mpsc::channel(8192);
+        let (tx, rx) = mpsc::channel(buffer_size);
 
         let task = Self::push_loop(consumer, rx, push_interval);
 
