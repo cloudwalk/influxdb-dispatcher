@@ -24,7 +24,7 @@ pub trait IntoNamedQuery: InfluxDbWriteable + Sized {
     }
 }
 
-impl<T: InfluxDbWriteable> IntoNamedQuery for T { }
+impl<T: InfluxDbWriteable> IntoNamedQuery for T {}
 
 /// Dispatch a single metric to the database.
 /// Will emmit a log record if an error occurs.
