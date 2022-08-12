@@ -8,7 +8,7 @@ use std::time::Duration;
 use async_trait::async_trait;
 use futures::{stream::FuturesUnordered, StreamExt};
 use influxdb::InfluxDbWriteable;
-use tokio::sync::mpsc;
+use tokio::{sync::mpsc, time::MissedTickBehavior};
 
 /// Convert a metric to an [influxdb] query using the type name.
 pub trait IntoNamedQuery: InfluxDbWriteable + Sized {
@@ -120,6 +120,7 @@ where
         C: MetricsConsumer<Metric = M>,
     {
         let mut interval = tokio::time::interval(Duration::from_secs(push_interval));
+        interval.set_missed_tick_behavior(MissedTickBehavior::Skip);
 
         tracing::info!("Starting InfluxDb metrics loop");
 
