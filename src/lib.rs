@@ -127,8 +127,11 @@ where
         loop {
             tokio::select! {
                 result = channel.recv() => match result {
-                    None => break, // Channel is closed, abort metrics task.
                     Some(metric) => consumer.accept(metric),
+                    None => { // Channel is closed, abort metrics task.
+                        tracing::info!("Shutting down metrics task.");
+                        break
+                    }
                 },
 
                 _ = interval.tick() => consumer.flush().await,
