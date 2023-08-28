@@ -11,7 +11,7 @@ keywords = [ "influxdb", "grafana" ]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-influxdb = "0.5"
+influxdb = { version = "0.5", default-features = false }
 
 # Config
 envconfig = "0.9"
@@ -29,4 +29,7 @@ serde = "1.0"
 toml = "0.5"
 
 [features]
+default = ["reqwest-client"]
+reqwest-client = ["influxdb/reqwest-client"]
+reqwest-client-rustls = ["influxdb/reqwest-client-rustls"]
 util = []
