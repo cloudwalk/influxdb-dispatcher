@@ -29,3 +29,22 @@ impl RunningAverage {
         self.average
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_average() {
+        let mut running_avg = RunningAverage::default();
+        for i in 1..=100 {
+            running_avg.accept(i as f64);
+
+            let range = 1..=i;
+            let size = range.len() as f64;
+            let avg = range.sum::<u16>() as f64 / size;
+
+            assert_eq!(running_avg.get(), avg);
+        }
+    }
+}
