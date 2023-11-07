@@ -17,11 +17,11 @@ impl RunningAverage {
         // M_n = (V_1 + ... + V_n) / n
         // M_(n+1) = (V_1 + ... + V_n + V_(n+1)) / (n+1)
         // M_(n+1) = (M_n * n + V_(n+1)) / (n+1)
-        // M_(n+1) = (n / (n+1)) * (M_n / (n+1)) + (V_(n+1) / (n+1))
+        // M_(n+1) = ((M_n * n) / (n+1)) + (V_(n+1) / (n+1))
+        // M_(n+1) = M_n * (n / (n+1)) + (V_(n+1) / (n+1))
         let count = self.count as f64;
         self.count += 1;
-        self.average =
-            (count / (count + 1.0)) * (self.average / (count + 1.0)) + (value / (count + 1.0));
+        self.average = self.average * (count / (count + 1.0)) + (value / (count + 1.0));
     }
 
     /// Get the current average value.
