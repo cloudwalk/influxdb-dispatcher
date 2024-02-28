@@ -22,7 +22,6 @@ tracing = "0.1"
 # Async
 tokio = { version = "1.14", features = ["macros"] }
 futures = { version = "0.3", default-features = false, features = ["std"] }
-async-trait = "0.1"
 
 # Serializing
 serde = "1.0"

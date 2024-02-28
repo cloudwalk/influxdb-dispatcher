@@ -3,9 +3,8 @@
 #[cfg(feature = "util")]
 pub mod util;
 
-use std::time::Duration;
+use std::{future::Future, time::Duration};
 
-use async_trait::async_trait;
 use futures::{stream::FuturesUnordered, StreamExt};
 use influxdb::InfluxDbWriteable;
 use tokio::{sync::mpsc, time::MissedTickBehavior};
@@ -50,7 +49,6 @@ where
 
 /// Aggregator for metrics.
 /// An aggregator should collect metrics so they can be batch dispatched.
-#[async_trait]
 pub trait MetricsConsumer {
     /// The metrics type.
     type Metric;
@@ -62,7 +60,7 @@ pub trait MetricsConsumer {
     fn accept(&mut self, metric: Self::Metric);
 
     /// Flush all consumed metrics to the database.
-    async fn flush(&mut self);
+    fn flush(&mut self) -> impl Future<Output = ()> + Send;
 }
 
 /// A handle to the InfluxDb metrics recorder.
