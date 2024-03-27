@@ -20,13 +20,18 @@ impl RunningAverage {
         // M_(n+1) = ((M_n * n) / (n+1)) + (V_(n+1) / (n+1))
         // M_(n+1) = M_n * (n / (n+1)) + (V_(n+1) / (n+1))
         let count = self.count as f64;
-        self.count += 1;
+        self.count.saturating_add(1); // Saturating should create a minor imprecision in the result.
         self.average = self.average * (count / (count + 1.0)) + (value / (count + 1.0));
     }
 
     /// Get the current average value.
     pub fn get(&self) -> f64 {
         self.average
+    }
+
+    /// Get the count of recorded values.
+    pub fn count(&self) -> u32 {
+        self.count
     }
 }
 
