@@ -28,6 +28,11 @@ impl RunningAverage {
     pub fn get(&self) -> f64 {
         self.average
     }
+
+    /// Get the count of recorded values.
+    pub fn count(&self) -> u32 {
+        self.count
+    }
 }
 
 #[cfg(test)]
